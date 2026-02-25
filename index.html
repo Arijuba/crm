@@ -3,188 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GUOFUHEE CRM</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="GUOFUHEE CRM">
     <link rel="apple-touch-icon" href="https://guofuhee.com.br/wp-content/uploads/2024/12/Favicon_Guofuhee.png">
-    
-    <title>GUOFUHEE CRM</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <style>
-        :root { --bg-dark: #000b14; --accent-green: #00d29d; --card-bg: #001f33; --white: #ffffff; }
+        :root { --bg-dark: #00111a; --card-bg: #001f33; --accent-green: #00d29d; --glow: rgba(0, 210, 157, 0.3); --white: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); margin: 0; padding: 0; display: flex; justify-content: center; color: var(--white); overflow-x: hidden; }
         
-        * { -webkit-tap-highlight-color: transparent; outline: none; }
+        .glow-1 { position: fixed; width: 300px; height: 300px; background: var(--accent-green); filter: blur(120px); border-radius: 50%; top: -100px; right: -100px; opacity: 0.15; z-index: 0; }
+        .glow-2 { position: fixed; width: 400px; height: 400px; background: #003a5d; filter: blur(100px); border-radius: 50%; bottom: -150px; left: -150px; opacity: 0.3; z-index: 0; }
 
-        body { 
-            font-family: 'Inter', sans-serif; background: var(--bg-dark); margin: 0; padding: 0; 
-            color: var(--white); height: 100vh; width: 100vw; overflow: hidden; position: fixed;
-        }
-
-        /* Efeito de profundidade de App */
-        .app-shell { 
-            display: flex; flex-direction: column; height: 100%; width: 100%; 
-            background: linear-gradient(180deg, #00111a 0%, #000b14 100%);
-        }
-
-        .header { 
-            padding: 50px 20px 20px; background: rgba(0, 31, 51, 0.9);
-            border-bottom: 1px solid rgba(0, 210, 157, 0.2); backdrop-filter: blur(10px);
-        }
-
-        .header h1 { font-size: 20px; font-weight: 800; margin: 0; letter-spacing: 3px; display: flex; align-items: center; gap: 10px; }
-        .dot { width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 10px var(--accent-green); }
-
-        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; -webkit-overflow-scrolling: touch; }
-
-        .nav-tabs { display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 25px; }
-        .nav-tabs button { 
-            flex: 1; padding: 12px; border: none; border-radius: 10px; color: #888; 
-            background: transparent; font-weight: 600; font-size: 12px; transition: 0.3s;
-        }
-        .nav-tabs button.active { background: var(--accent-green); color: #001f33; }
-
-        .card { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .container { width: 100%; max-width: 500px; min-height: 100vh; background: rgba(0, 31, 51, 0.7); backdrop-filter: blur(25px); padding: 20px; box-sizing: border-box; position: relative; z-index: 1; border-left: 1px solid rgba(0, 210, 157, 0.1); border-right: 1px solid rgba(0, 210, 157, 0.1); }
         
-        label { display: block; font-size: 10px; font-weight: 700; color: var(--accent-green); text-transform: uppercase; margin: 15px 0 5px; letter-spacing: 1px; }
+        .header { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dot { width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 12px var(--accent-green); }
+        h1 { font-size: 20px; font-weight: 800; margin: 0; letter-spacing: 1px; }
+
+        .tabs { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 25px; }
+        .tabs button { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: transparent; color: white; font-weight: 600; font-size: 12px; transition: 0.3s; }
+        .tabs button.active { background: var(--accent-green); color: #001f33; box-shadow: 0 0 15px var(--glow); }
+
+        .search-area { background: rgba(0, 210, 157, 0.05); border: 1px solid var(--accent-green); border-radius: 15px; padding: 15px; margin-bottom: 25px; display: none; }
         
-        input, select, textarea { 
-            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.2); color: white; font-size: 16px !important; box-sizing: border-box;
-        }
-
-        .btn-submit { 
-            width: 100%; padding: 20px; background: var(--accent-green); color: #001f33; 
-            border: none; border-radius: 15px; font-weight: 800; font-size: 16px; margin-top: 30px;
-            box-shadow: 0 10px 20px rgba(0, 210, 157, 0.2); text-transform: uppercase;
-        }
-
+        label { display: block; font-size: 9px; font-weight: 800; color: var(--accent-green); text-transform: uppercase; margin: 15px 0 5px; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(0,0,0,0.2); color: white; font-size: 15px !important; outline: none; box-sizing: border-box; }
+        
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
-
-        #status-msg { text-align: center; margin-top: 20px; font-size: 14px; font-weight: 600; color: var(--accent-green); }
+        .btn-save { width: 100%; padding: 16px; background: transparent; color: var(--accent-green); border: 2px solid var(--accent-green); border-radius: 50px; margin-top: 30px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .btn-save:hover { background: var(--accent-green); color: #001f33; box-shadow: 0 0 20px var(--accent-green); }
         
-        /* Estilo da barra de busca */
-        .search-box { background: rgba(0, 210, 157, 0.1); border: 1px solid var(--accent-green); border-radius: 15px; padding: 15px; margin-bottom: 20px; display: none; }
+        #status-bar { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 600; color: var(--accent-green); }
     </style>
 </head>
 <body>
-
-<div class="app-shell">
-    <div class="header">
-        <h1><div class="dot"></div> GUOFUHEE CRM</h1>
-    </div>
-
-    <div class="content">
-        <div class="nav-tabs">
-            <button id="tab1" class="active" onclick="setMode('create')">NOVO</button>
-            <button id="tab2" onclick="setMode('update')">ATUALIZAR</button>
+    <div class="glow-1"></div><div class="glow-2"></div>
+    <div class="container">
+        <div class="header"><div class="dot"></div><h1>GUOFUHEE</h1></div>
+        
+        <div class="tabs">
+            <button id="t1" class="active" onclick="setTab('create')">NOVO REGISTRO</button>
+            <button id="t2" onclick="setTab('update')">ATUALIZAR OP</button>
         </div>
 
-        <div id="searchSection" class="search-box">
-            <label>Buscar OP</label>
-            <input list="opData" id="searchId" placeholder="ID ou Empresa...">
-            <datalist id="opData"></datalist>
-            <button onclick="doSearch()" class="btn-submit" style="margin-top: 10px; padding: 12px; font-size: 12px;">LOCALIZAR</button>
+        <div id="boxBusca" class="search-area">
+            <label>Localizar OP</label>
+            <input list="opList" id="inputBusca" placeholder="ID ou Empresa...">
+            <datalist id="opList"></datalist>
+            <button onclick="executarBusca()" class="btn-save" style="margin-top:10px; padding:10px; font-size:12px;">BUSCAR</button>
         </div>
 
-        <div class="card">
-            <form id="crmForm">
-                <input type="hidden" name="action" id="actionFlag" value="create">
-                
-                <div class="grid">
-                    <div><label>ID</label><input type="text" name="id" id="f_id" readonly></div>
-                    <div><label>Status</label>
-                        <select name="status" id="f_status">
-                            <option value="Lead">Lead</option>
-                            <option value="Qualified">Qualified</option>
-                            <option value="Won">Won</option>
-                            <option value="Lost">Lost</option>
+        <form id="mainForm">
+            <input type="hidden" name="action" id="hidAction" value="create">
+            
+            <div class="grid">
+                <div><label>Opportunity ID</label><input type="text" name="id" id="f_id" readonly></div>
+                <div><label>Status</label>
+                    <select name="status" id="f_status">
+                        <option value="Lead">Lead</option><option value="Qualified">Qualified</option>
+                        <option value="Proposal in Preparation">Proposal in Preparation</option><option value="Dealing">Dealing</option>
+                        <option value="Won">Won</option><option value="Lost">Lost</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Company Name</label><input type="text" name="companyName" id="f_name" required>
+
+            <label>Priority</label>
+            <select name="priority" id="f_priority">
+                <option value="Urgente e Importante">Urgente e Importante</option><option value="Importante, não urgente">Importante, não urgente</option>
+                <option value="Urgente, não importante">Urgente, não importante</option><option value="Eliminar">Eliminar</option>
+            </select>
+
+            <div class="grid">
+                <div><label>Owner</label><input type="text" name="owner" id="f_owner"></div>
+                <div><label>Our Group</label><input type="text" name="ourGroup" id="f_group"></div>
+            </div>
+
+            <div class="grid">
+                <div><label>State (UF)</label>
+                    <select name="state" id="f_state">
+                        <option value="">Selecione...</option>
+                        <option value="SP">SP</option><option value="RJ">RJ</option><option value="MG">MG</option><option value="PR">PR</option>
                         </select>
-                    </div>
                 </div>
+                <div><label>Segment</label><input type="text" name="segment" id="f_segment"></div>
+            </div>
 
-                <label>Empresa</label>
-                <input type="text" name="companyName" id="f_name" required>
+            <label>Business Interest</label>
+            <select name="businessInterest" id="f_interest">
+                <option value="FAD HGS">FAD HGS</option><option value="FAD HRS">FAD HRS</option><option value="FAD HGS & HRS">FAD HGS & HRS</option>
+            </select>
 
-                <div class="grid">
-                    <div><label>Owner</label><input type="text" name="owner" id="f_owner"></div>
-                    <div><label>Valor (R$)</label><input type="text" name="estimatedValue" id="f_val" oninput="maskMoney(this)"></div>
-                </div>
+            <div class="grid">
+                <div><label>Estimated Value</label><input type="text" name="estimatedValue" id="f_val" oninput="moneyMask(this)"></div>
+                <div><label>Last Interaction</label><input type="date" name="lastInteraction" id="f_last"></div>
+            </div>
 
-                <label>Próximo Passo</label>
-                <input type="text" name="nextAction" id="f_next">
+            <div class="grid">
+                <div><label>Next Action</label><input type="text" name="nextAction" id="f_next"></div>
+                <div><label>Deadline</label><input type="date" name="deadline" id="f_dead"></div>
+            </div>
 
-                <label>Observações</label>
-                <textarea name="note" id="f_note" rows="3"></textarea>
+            <label>Drive's Link</label><input type="url" name="driveLink" id="f_drive">
+            <label>Note</label><textarea name="note" id="f_note" rows="3"></textarea>
 
-                <button type="submit" class="btn-submit" id="mainBtn">Salvar Registro</button>
-            </form>
-            <div id="status-msg"></div>
-        </div>
+            <button type="submit" class="btn-save" id="btnS">SALVAR NA PLANILHA</button>
+        </form>
+        <div id="status-bar"></div>
     </div>
-</div>
 
-<script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7BNPehdl0IzdnOkUgEBj0Dcb97jTDxS1reJSF7QsePaC2D0n_4Vq3xK_JSOcJZ5eq/exec';
+    <script>
+        const SCRIPT_URL = 'COLE_AQUI_SEU_LINK_DEPLOY_DO_GOOGLE';
 
-    window.onload = () => { updateId(); };
+        window.onload = () => { resetId(); };
 
-    function updateId() {
-        google.script.run.withSuccessHandler(id => { document.getElementById('f_id').value = id; }).proximaOP();
-    }
-
-    function setMode(m) {
-        const isUpd = m === 'update';
-        document.getElementById('actionFlag').value = m;
-        document.getElementById('searchSection').style.display = isUpd ? 'block' : 'none';
-        document.getElementById('tab1').className = isUpd ? '' : 'active';
-        document.getElementById('tab2').className = isUpd ? 'active' : '';
-        if(!isUpd) { document.getElementById('crmForm').reset(); updateId(); } else {
-            google.script.run.withSuccessHandler(list => {
-                const dl = document.getElementById('opData');
-                dl.innerHTML = "";
-                list.forEach(i => { let o = document.createElement('option'); o.value = i; dl.appendChild(o); });
-            }).listarOPs();
+        function api(method, params, cb) {
+            const qs = new URLSearchParams({method, ...params}).toString();
+            fetch(`${SCRIPT_URL}?${qs}`).then(r => r.json()).then(cb);
         }
-    }
 
-    function doSearch() {
-        let val = document.getElementById('searchId').value;
-        let id = val.split(" - ")[0];
-        document.getElementById('status-msg').innerText = "Buscando...";
-        google.script.run.withSuccessHandler(res => {
-            if(res.found) {
-                document.getElementById('f_id').value = id;
-                document.getElementById('f_name').value = res.companyName;
-                document.getElementById('f_owner').value = res.owner;
-                document.getElementById('f_val').value = res.estimatedValue;
-                document.getElementById('f_next').value = res.nextAction;
-                document.getElementById('f_note').value = res.note;
-                document.getElementById('status-msg').innerText = "Carregado!";
+        function resetId() {
+            api('proximaOP', {}, (id) => document.getElementById('f_id').value = id);
+        }
+
+        function setTab(m) {
+            const isU = m === 'update';
+            document.getElementById('hidAction').value = m;
+            document.getElementById('boxBusca').style.display = isU ? 'block' : 'none';
+            document.getElementById('t1').className = isU ? '' : 'active';
+            document.getElementById('t2').className = isU ? 'active' : '';
+            if(!isU) { document.getElementById('mainForm').reset(); resetId(); } else {
+                api('listarOPs', {}, (list) => {
+                    const dl = document.getElementById('opList');
+                    dl.innerHTML = "";
+                    list.forEach(i => { let o = document.createElement('option'); o.value = i; dl.appendChild(o); });
+                });
             }
-        }).buscarEmpresa(id);
-    }
+        }
 
-    function maskMoney(i) {
-        let v = i.value.replace(/\D/g,'');
-        v = (v/100).toFixed(2).replace(".", ",");
-        i.value = "R$ " + v;
-    }
+        function executarBusca() {
+            let id = document.getElementById('inputBusca').value.split(" - ")[0].trim();
+            document.getElementById('status-bar').innerText = "BUSCANDO...";
+            api('buscarEmpresa', {id}, (res) => {
+                if(res.found) {
+                    document.getElementById('f_id').value = id;
+                    document.getElementById('f_name').value = res.companyName || "";
+                    document.getElementById('f_status').value = res.status || "Lead";
+                    document.getElementById('f_priority').value = res.priority || "";
+                    document.getElementById('f_owner').value = res.owner || "";
+                    document.getElementById('f_group').value = res.ourGroup || "";
+                    document.getElementById('f_state').value = res.state || "";
+                    document.getElementById('f_segment').value = res.segment || "";
+                    document.getElementById('f_interest').value = res.businessInterest || "";
+                    document.getElementById('f_val').value = res.estimatedValue || "";
+                    document.getElementById('f_last').value = res.lastInteraction || "";
+                    document.getElementById('f_next').value = res.nextAction || "";
+                    document.getElementById('f_dead').value = res.deadline || "";
+                    document.getElementById('f_drive').value = res.driveLink || "";
+                    document.getElementById('f_note').value = res.note || "";
+                    document.getElementById('status-bar').innerText = "DADOS CARREGADOS";
+                }
+            });
+        }
 
-    document.getElementById('crmForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        document.getElementById('mainBtn').disabled = true;
-        document.getElementById('status-msg').innerText = "Sincronizando com Nuvem...";
-        const data = new URLSearchParams(new FormData(this));
-        fetch(SCRIPT_URL, { method: 'POST', body: data, mode: 'no-cors' })
-        .then(() => {
-            document.getElementById('status-msg').innerText = "✅ Salvo com Sucesso!";
-            document.getElementById('mainBtn').disabled = false;
-            if(document.getElementById('actionFlag').value === 'create') { this.reset(); updateId(); }
+        function moneyMask(i) {
+            let v = i.value.replace(/\D/g,'');
+            v = (v/100).toFixed(2).replace(".", ",");
+            i.value = "R$ " + v;
+        }
+
+        document.getElementById('mainForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('btnS').disabled = true;
+            document.getElementById('status-bar').innerText = "ENVIANDO...";
+            fetch(SCRIPT_URL, { method: 'POST', body: new URLSearchParams(new FormData(this)), mode: 'no-cors' })
+            .then(() => {
+                document.getElementById('status-bar').innerText = "✅ SALVO COM SUCESSO!";
+                document.getElementById('btnS').disabled = false;
+                if(document.getElementById('hidAction').value === 'create') { this.reset(); resetId(); }
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
